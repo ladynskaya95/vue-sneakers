@@ -1,5 +1,10 @@
 <script setup>
 import Card from "./Card.vue"
+
+const onClickAdd = () => {
+    alert("Add")
+}
+
 </script>
 
 <template>
@@ -7,6 +12,9 @@ import Card from "./Card.vue"
         <Card 
             title="Men's Sneakers Nike Blazer Mid Suede" imageUrl="/sneakers/sneakers-1.jpg"
             :price="34"
+            :isAdded="true"
+            :isFavorite="true"
+            :onClickAdd="onClickAdd"
             />
         <Card/>
         <Card/>
