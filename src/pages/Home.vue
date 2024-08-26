@@ -1,5 +1,6 @@
 <script setup>
 import axios from "axios"
+import debounce from "lodash.debounce";
 import CardList from "../components/CardList.vue"
 import {inject, reactive, watch, ref, onMounted} from "vue"
 
@@ -24,25 +25,25 @@ const onChangeSelect = event => {
   filters.sortBy = event.target.value
 }
 
-const onChangeSearchInput = event => {
+const onChangeSearchInput = debounce(event => {
   filters.searchQuery = event.target.value
-}
+}, 150)
 
 const addToFavorite = async (item) => {
  try{
   if(!item.isFavorite) {
     const obj = {
-      parentId: item.id
+      item_id: item.id
     }
 
     item.isFavorite = true;
 
-    const {data} = await axios.post("https://06ac99e555756cbc.mokky.dev/favorires", obj)
+    const {data} = await axios.post("https://06ac99e555756cbc.mokky.dev/favorites", obj)
 
     item.favoriteId = data.id;
  } else {
     item.isFavorite = false;
-   await axios.delete(`https://06ac99e555756cbc.mokky.dev/favorires/${item.favoriteId}`)
+   await axios.delete(`https://06ac99e555756cbc.mokky.dev/favorites/${item.favoriteId}`)
 
    
    item.favoriteId = null;
@@ -55,9 +56,9 @@ const addToFavorite = async (item) => {
 const fetchFavorites = async () => {
     try {
    
-    const {data: favorites} = await axios.get("https://06ac99e555756cbc.mokky.dev/favorires")
+    const {data: favorites} = await axios.get("https://06ac99e555756cbc.mokky.dev/favorites")
     items.value = items.value.map(item => {
-      const favorite = favorites.find(favorite => favorite.parentId === item.id);
+      const favorite = favorites.find(favorite => favorite.item_id === item.id);
 
       if (!favorite) {
         return item;

@@ -1,4 +1,8 @@
 <script setup>
+import { inject } from 'vue';
+
+const { closeDrawer } = inject('cart')
+
 defineProps({
     title: String,
     description: String,
@@ -11,5 +15,6 @@ defineProps({
     <img height="80" width="80" :src="imageUrl" alt="info image">
     <h2 class="mt-4 text-2xl font-medium">{{ title }}</h2>
     <p class="text-gray-400 mt-2">{{ description }}</p>
+     <button @click="closeDrawer" class="back-to-store-btn">Back to Store</button>
     </div>
 </template>
